@@ -37,7 +37,10 @@ def get_inference_api_key():
 # Function for API configuration at sidebar
 def sidebar_api_key_configuration():
     groq_api_key = get_api_key()
-    if groq_api_key == '':
+    # if groq_api_key == '':
+    #     st.sidebar.warning('Enter the API Key(s) 🗝️')
+    #     st.session_state.prompt_activation = False
+    if not groq_api_key:
         st.sidebar.warning('Enter the API Key(s) 🗝️')
         st.session_state.prompt_activation = False
     elif (groq_api_key.startswith('gsk_') and (len(groq_api_key) == 56)):
@@ -47,6 +50,9 @@ def sidebar_api_key_configuration():
         st.sidebar.warning('Please enter the correct API Key 🗝️!', icon='⚠️')
         st.session_state.prompt_activation = False
     return groq_api_key
+
+
+
 
 
 def sidebar_groq_model_selection():
