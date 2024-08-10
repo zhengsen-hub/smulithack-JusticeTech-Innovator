@@ -17,7 +17,8 @@ load_dotenv()
 def get_api_key():
     # Try to get the API key from st.secrets first
     try:
-        groq_api_key = os.getenv("GROQ_API_KEY", "")
+        # groq_api_key = os.getenv("GROQ_API_KEY", "")
+        groq_api_key = st.secrets["GROQ_API_KEY"]
         
         return groq_api_key
     except Exception as e:
@@ -25,7 +26,8 @@ def get_api_key():
 
 def get_inference_api_key():
     try:
-        inference_api_key = os.getenv("INFERENCE_API_KEY", "")
+        # inference_api_key = os.getenv("INFERENCE_API_KEY", "")
+        inference_api_key = st.secrets["INFERENCE_API_KEY"]
 
         return inference_api_key
     except Exception as e:
