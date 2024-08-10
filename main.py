@@ -71,8 +71,9 @@ if selected == "Legal Chat":
 
     if "messages" not in st.session_state:
         st.session_state["messages"] = [{"role": "assistant", "content": """Hi, I am here to help provide general information on your legal query. 
-                                         \n *Please take note that this is only intended as a preliminary information tool only and should not be considered legal advice.* \n
+                                         \n Please take note that this is only intended as a preliminary information tool only and should not be considered legal advice. \n
                                          \n The information will come from relevant statutory laws & provisions, case laws and previous cases.
+                                         \n *Example: Can an organisation collect, use or disclose publicly available personal data for any purposes?*
                                          """}]
 
     for msg in st.session_state.messages:
@@ -87,7 +88,7 @@ if selected == "Legal Chat":
         with st.spinner('Processing...'):
             st.session_state.response = get_llm_response(llm, prompt, question)
             st.session_state.messages.append({"role": "assistant", "content": st.session_state.response['answer']})
-            st.chat_message("assistant").write(st.session_state.response['answer'])
+            st.chat_message("assistant").write(st.session_state.response['answer'] + "\n\n" +":red[***Disclaimer: While we strive to provide helpful information, the chatbot's responses are not guaranteed to be correct or complete. It is essential to verify any information obtained from the chatbot with reliable sources.***]")
 
 # ----- SETUP REFERENCE MENU ------
 if selected == "Reference":
@@ -100,6 +101,13 @@ if selected == "Reference":
 # ----- SETUP ASKFORHELP MENU ------
 if selected == "Contact Legal Support":
     st.title("Contact Legal Support")
+    st.write(""":red[**Disclaimer: Deemed Consent**]
+                \n By using this feature, you are providing your 'deemed consent' to the collection, use, and disclosure of your personal data by us for the purposes outlined in our Privacy Policy. 
+
+                \n 'Deemed consent' means that if you voluntarily provide your personal data to us, it is assumed that you consent to the collection, use, and disclosure of your personal data for the purposes that would be considered obvious to a reasonable person in the circumstances and for which you have provided the personal data.
+
+                \n If you do not agree with these terms, please refrain from using this feature. We reserve the right to change our policy at any time, and we will post those changes on this page. Please check back periodically to ensure you are aware of any changes.
+             """)
 
     if st.session_state.response is not None:
         with st.expander("Draft Email for Legal Advice"):
@@ -121,8 +129,6 @@ if selected == "Contact Legal Support":
             """
             for i, doc in enumerate(st.session_state.response["context"]):
                 email_body += f"Reference {i + 1}: {doc.page_content}\n"
-
-
 
             st.session_state.email_draft = email_body
             st.markdown(email_body)
